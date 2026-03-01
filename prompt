@@ -1,0 +1,43 @@
+You are an expert Python engineer working on the zev repository. Your task is to implement a default Local Mode that works completely offline without any API key or LLM. It must use a string parsing engine to read natural, descriptive queries (e.g., "look for all py files from the last hour") and map them to candidate shell commands using standard tools (find, grep, sed, awk, ls, stat, date, etc.). These candidates should be routed into the existing LLM flow so the user can select, copy, or run them.
+
+You must deliver a production-ready, highly modular implementation. Strictly adhere to the following architectural guidelines and guardrails:
+
+1. State Management & Initialization (Critical Guardrail)
+
+Prevent Global State Crashes: When a user runs zev for the first time without a .zevrc config, you must gracefully create a default local config (LLM_PROVIDER=local) and explicitly inject this into the active runtime config so the global state does not crash with ValueError: Invalid LLM provider: None.
+
+UX Banner: Update main.py to print a clear, stylized "Local Mode" banner if the user runs zev with no arguments in local mode.
+
+Spinner Bypass: Do not show the "Thinking..." network spinner when routing local commands; local parsing is instantaneous.
+
+2. Parser Architecture (Dismantle the Monolith)
+
+Modular Extractors: Do not write a massive procedural parsing function. Implement an Extractor base class and create specific subclasses (ActionExtractor, FileTypeExtractor, TimeWindowExtractor, PathExtractor, SearchPatternExtractor, etc.). Use a QueryParser to run the query through the pipeline of extractors to build a ParsedQuery dataclass.
+
+Regex Optimization: Pre-compile all regex strings using re.compile() as class-level constants (e.g., _PATTERNS) inside your extractors to prevent on-the-fly compilation overhead.
+
+Input Normalization: Ensure the parser cleanly lowercases inputs for matching, but preserves original casing for exact search strings.
+
+3. Command Generation & Security
+
+Consolidated Generators: Create a base CommandGenerator class. Group your specific generators into logical, consolidated modules to avoid directory bloat (e.g., discovery.py for find/ls/size, search.py for grep/sed, file_ops.py for rm/cp/mv, system.py for ps/kill/df). Use a CommandGeneratorRegistry to map actions to generators.
+
+Shell Sanitization (Guardrail): You must use shlex.quote() for all extracted paths and variables before injecting them into shell commands to prevent command injection. Create a custom quote_pattern() utility that securely quotes variables while explicitly preserving valid find glob wildcards (like * and ?).
+
+Safety Flags: Any command that modifies state or deletes data (rm, sed -i, kill, chmod) must have is_dangerous=True and include a dangerous_explanation. Always generate a safe "preview" command (e.g., find ... without -delete) as the first option for destructive actions.
+
+4. Cross-Platform Compatibility (Guardrail)
+
+GNU vs. BSD: Do not hardcode GNU-specific flags (like stat --format='%Y %n'). Create a platform.py utility that checks platform.system(). If on Linux, use GNU flags; if on macOS/Darwin, use BSD flags (e.g., stat -f "%m %N" or ps -m). Alternatively, use POSIX-compliant fallbacks like xargs -0 ls -t for modification-time sorting.
+
+5. Graceful Degradation (UX)
+
+Contextual Fallbacks: If the query cannot be fully mapped to an action, the FallbackCommandGenerator must not execute arbitrary commands like pwd. Instead, it should read whatever partial context was extracted (e.g., if a file type was found) and output helpful, educational command suggestions formatted as comments (e.g., # Try: zev 'find python files').
+
+6. Testing & Type Compatibility
+
+Python 3.9 Compliance: zev supports Python 3.9. You must use Optional[T] and List[T] from the typing module. Do not use the Python 3.10+ | union syntax (e.g., OptionsResponse | None will crash).
+
+Robust Tests: Write granular unit tests for your extractors, platform utilities, and generators. When writing assertions for extractors, remember that your parser lowercases strings (e.g., assert against 'todo', not 'TODO').
+
+Write the complete implementation based on these constraints.
