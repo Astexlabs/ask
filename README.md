@@ -12,7 +12,7 @@ Terminal commands from natural language.
 
 ---
 
-## Install with uv - recommended
+## Install with [uv](https://docs.astral.sh/uv/getting-started/installation) - recommended
 
 ```bash
 uv tool install astexlabs-ask
