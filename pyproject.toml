@@ -1,6 +1,6 @@
 [project]
 name = "astexlabs-ask"
-version = "0.1.1"
+version = "0.2.1"
 description = "Lookup CLI commands easily"
 readme = "README.md"
 dependencies = [
