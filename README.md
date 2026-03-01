@@ -12,12 +12,18 @@ Terminal commands from natural language.
 
 ---
 
-## Install
+## Install with uv - recommended
 
+```bash
+uv tool install astexlabs-ask
+```
+
+## Or with pip
 ```bash
 pip install astexlabs-ask
 ```
 
+by default it with the local mode which is pretty okay for most basic commands you may need
 Configure (optional): `ask --setup`. Works offline in **local mode** with no API key.
 
 ---
