@@ -40,7 +40,6 @@ class CommandGeneratorRegistry:
             if commands:
                 return commands
 
-        # If no action matched or generator returned nothing, try fallback
         if self._fallback is not None:
             return self._fallback.generate(parsed)
 

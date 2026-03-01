@@ -10,7 +10,7 @@ from ask.llms.local.platform_utils import (
     find_mtime_flag,
     is_macos,
 )
-from ask.llms.local.sanitize import quote_path, quote_pattern
+from ask.llms.local.sanitize import quote_find_pattern, quote_path, quote_pattern
 from ask.llms.types import Command
 
 
@@ -21,7 +21,6 @@ class FindCommandGenerator(CommandGenerator):
         commands: List[Command] = []
         base_path = quote_path(parsed.path) if parsed.path else "."
 
-        # Build a find command
         parts = ["find", base_path]
         explanation_bits: List[str] = []
 
@@ -34,7 +33,7 @@ class FindCommandGenerator(CommandGenerator):
         if parsed.file_types:
             name_clauses = []
             for ext in parsed.file_types:
-                name_clauses.append(f"-name {quote_pattern('*.' + ext)}")
+                name_clauses.append(f"-name {quote_find_pattern('*.' + ext)}")
             if len(name_clauses) == 1:
                 parts.append(name_clauses[0])
                 explanation_bits.append(f".{parsed.file_types[0]} files")
@@ -49,7 +48,7 @@ class FindCommandGenerator(CommandGenerator):
             pat = parsed.name_pattern
             if "*" not in pat and "?" not in pat:
                 pat = f"*{pat}*"
-            parts.append(f"-name {quote_pattern(pat)}")
+            parts.append(f"-name {quote_find_pattern(pat)}")
             explanation_bits.append(f"matching '{parsed.name_pattern}'")
 
         # Time filter
@@ -75,10 +74,9 @@ class FindCommandGenerator(CommandGenerator):
             is_dangerous=False,
         ))
 
-        # Alternative: ls-based if simple (no complex filters)
         if not parsed.size_constraint and not parsed.time_minutes and not parsed.time_days:
             if parsed.file_types:
-                globs = " ".join(f"*.{ext}" for ext in parsed.file_types)
+                globs = " ".join(quote_pattern(f"*.{ext}") for ext in parsed.file_types)
                 ls_cmd = f"ls -la {globs}"
                 commands.append(Command(
                     command=ls_cmd,
@@ -86,7 +84,6 @@ class FindCommandGenerator(CommandGenerator):
                     is_dangerous=False,
                 ))
 
-        # Alternative: recent files sorted by modification time
         if parsed.time_minutes or parsed.time_days or "recent" in parsed.raw_query or "newest" in parsed.raw_query or "latest" in parsed.raw_query:
             sort_cmd = cmd_str.replace("-type f", "-type f -printf '%T@ %p\\n'") + " | sort -rn | head -20"
             if is_macos():
@@ -112,7 +109,7 @@ class SizeCommandGenerator(CommandGenerator):
         if parsed.file_types:
             # Show size of specific file types
             for ext in parsed.file_types[:2]:
-                cmd = f"find {base_path} -name {quote_pattern('*.' + ext)} -type f -exec {du_flags}" + " {} +"
+                cmd = f"find {base_path} -name {quote_find_pattern('*.' + ext)} -type f -exec {du_flags}" + " {} +"
                 commands.append(Command(
                     command=cmd,
                     short_explanation=f"Show sizes of .{ext} files",
@@ -138,7 +135,7 @@ class SizeCommandGenerator(CommandGenerator):
         # Largest files
         count = parsed.count or 10
         if parsed.file_types:
-            name_filter = " -o ".join(f"-name {quote_pattern('*.' + e)}" for e in parsed.file_types)
+            name_filter = " -o ".join(f"-name {quote_find_pattern('*.' + e)}" for e in parsed.file_types)
             if len(parsed.file_types) > 1:
                 name_filter = f"\\( {name_filter} \\)"
             cmd = f"find {base_path} {name_filter} -type f -exec ls -lhS {{}} + | head -{count}"
@@ -163,7 +160,7 @@ class CountCommandGenerator(CommandGenerator):
         if parsed.file_types:
             for ext in parsed.file_types[:2]:
                 # Count files
-                cmd = f"find {base_path} -name {quote_pattern('*.' + ext)} -type f | wc -l"
+                cmd = f"find {base_path} -name {quote_find_pattern('*.' + ext)} -type f | wc -l"
                 commands.append(Command(
                     command=cmd,
                     short_explanation=f"Count .{ext} files in {base_path}",
@@ -172,7 +169,7 @@ class CountCommandGenerator(CommandGenerator):
             # Count lines across files
             if parsed.file_types:
                 ext = parsed.file_types[0]
-                cmd = f"find {base_path} -name {quote_pattern('*.' + ext)} -type f -exec wc -l {{}} + | tail -1"
+                cmd = f"find {base_path} -name {quote_find_pattern('*.' + ext)} -type f -exec wc -l {{}} + | tail -1"
                 commands.append(Command(
                     command=cmd,
                     short_explanation=f"Count total lines across .{ext} files",

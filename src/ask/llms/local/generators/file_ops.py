@@ -4,7 +4,7 @@ from typing import List
 
 from ask.llms.local.generators.base import CommandGenerator
 from ask.llms.local.parser import ParsedQuery
-from ask.llms.local.sanitize import quote_path, quote_pattern
+from ask.llms.local.sanitize import quote_find_pattern, quote_path
 from ask.llms.types import Command
 
 
@@ -15,14 +15,13 @@ class DeleteCommandGenerator(CommandGenerator):
         commands: List[Command] = []
         base_path = quote_path(parsed.path) if parsed.path else "."
 
-        # Build find expression for targeting
         find_parts = ["find", base_path]
 
         if parsed.depth is not None:
             find_parts.append(f"-maxdepth {parsed.depth}")
 
         if parsed.file_types:
-            name_clauses = [f"-name {quote_pattern('*.' + ext)}" for ext in parsed.file_types]
+            name_clauses = [f"-name {quote_find_pattern('*.' + ext)}" for ext in parsed.file_types]
             if len(name_clauses) == 1:
                 find_parts.append(name_clauses[0])
             else:
@@ -33,7 +32,7 @@ class DeleteCommandGenerator(CommandGenerator):
             pat = parsed.name_pattern
             if "*" not in pat and "?" not in pat:
                 pat = f"*{pat}*"
-            find_parts.append(f"-name {quote_pattern(pat)}")
+            find_parts.append(f"-name {quote_find_pattern(pat)}")
 
         if parsed.time_minutes:
             find_parts.append(f"-mmin -{parsed.time_minutes}")
@@ -46,14 +45,12 @@ class DeleteCommandGenerator(CommandGenerator):
         find_parts.append("-type f")
         find_expr = " ".join(find_parts)
 
-        # SAFE PREVIEW first (always first option)
         commands.append(Command(
             command=find_expr,
             short_explanation="Preview: list files that would be deleted (safe, read-only)",
             is_dangerous=False,
         ))
 
-        # Actual delete
         commands.append(Command(
             command=f"{find_expr} -delete",
             short_explanation="Delete matching files",
@@ -82,7 +79,7 @@ class CopyCommandGenerator(CommandGenerator):
 
         if parsed.file_types:
             for ext in parsed.file_types[:2]:
-                cmd = f"find {base_path} -name {quote_pattern('*.' + ext)} -type f -exec cp {{}} {dest} \\;"
+                cmd = f"find {base_path} -name {quote_find_pattern('*.' + ext)} -type f -exec cp {{}} {dest} \\;"
                 commands.append(Command(
                     command=cmd,
                     short_explanation=f"Copy all .{ext} files to {dest}",
@@ -92,7 +89,7 @@ class CopyCommandGenerator(CommandGenerator):
             pat = parsed.name_pattern
             if "*" not in pat and "?" not in pat:
                 pat = f"*{pat}*"
-            cmd = f"find {base_path} -name {quote_pattern(pat)} -type f -exec cp {{}} {dest} \\;"
+            cmd = f"find {base_path} -name {quote_find_pattern(pat)} -type f -exec cp {{}} {dest} \\;"
             commands.append(Command(
                 command=cmd,
                 short_explanation=f"Copy files matching '{parsed.name_pattern}' to {dest}",
@@ -126,13 +123,13 @@ class MoveCommandGenerator(CommandGenerator):
         if parsed.file_types:
             for ext in parsed.file_types[:2]:
                 # Preview first
-                find_cmd = f"find {base_path} -name {quote_pattern('*.' + ext)} -type f"
+                find_cmd = f"find {base_path} -name {quote_find_pattern('*.' + ext)} -type f"
                 commands.append(Command(
                     command=find_cmd,
                     short_explanation=f"Preview: list .{ext} files that would be moved",
                     is_dangerous=False,
                 ))
-                cmd = f"find {base_path} -name {quote_pattern('*.' + ext)} -type f -exec mv {{}} {dest} \\;"
+                cmd = f"find {base_path} -name {quote_find_pattern('*.' + ext)} -type f -exec mv {{}} {dest} \\;"
                 commands.append(Command(
                     command=cmd,
                     short_explanation=f"Move all .{ext} files to {dest}",
@@ -157,7 +154,6 @@ class PermissionsCommandGenerator(CommandGenerator):
         commands: List[Command] = []
         base_path = quote_path(parsed.path) if parsed.path else "FILE"
 
-        # Check if "executable" is mentioned
         if "executable" in parsed.raw_query or "exec" in parsed.raw_query:
             commands.append(Command(
                 command=f"chmod +x {base_path}",
@@ -183,7 +179,7 @@ class PermissionsCommandGenerator(CommandGenerator):
 
         if parsed.file_types:
             ext = parsed.file_types[0]
-            cmd = f"find . -name {quote_pattern('*.' + ext)} -type f -exec ls -la {{}} +"
+            cmd = f"find . -name {quote_find_pattern('*.' + ext)} -type f -exec ls -la {{}} +"
             commands.append(Command(
                 command=cmd,
                 short_explanation=f"View permissions of all .{ext} files",
@@ -252,7 +248,6 @@ class ArchiveCommandGenerator(CommandGenerator):
                     is_dangerous=False,
                 ))
         else:
-            # Create archive
             commands.append(Command(
                 command=f"tar -czvf archive.tar.gz {base_path}",
                 short_explanation=f"Create gzipped tar archive of {base_path}",

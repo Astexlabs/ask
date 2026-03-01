@@ -31,7 +31,6 @@ from ask.llms.local.generators.system import (
 )
 from ask.llms.local.parser import ParsedQuery
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------

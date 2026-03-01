@@ -19,7 +19,6 @@ class FallbackCommandGenerator(CommandGenerator):
         commands: List[Command] = []
         hints: List[str] = []
 
-        # Build contextual suggestions based on whatever was extracted
         if parsed.file_types:
             exts = ", ".join(f".{e}" for e in parsed.file_types)
             hints.append(f"file type(s): {exts}")
@@ -79,7 +78,6 @@ class FallbackCommandGenerator(CommandGenerator):
                     is_dangerous=False,
                 ))
 
-        # If we still have nothing, provide general help
         if not commands:
             commands.append(Command(
                 command="# Try: ask 'find python files from the last hour'",

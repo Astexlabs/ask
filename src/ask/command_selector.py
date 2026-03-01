@@ -1,7 +1,9 @@
+import shutil
+import subprocess
+import sys
 from subprocess import run as run_command
 from typing import List
 
-import pyperclip
 import questionary
 from rich import print as rprint
 
@@ -14,6 +16,46 @@ _SELECT_STYLE = questionary.Style(
         ("instruction", "fg:#98c379"),
     ]
 )
+
+
+def _copy_to_clipboard(text: str) -> bool:
+    """Copy text to the system clipboard without relying on pyperclip's platform detection.
+
+    Tries clipboard backends in order of preference for the current platform,
+    then falls back to pyperclip as a last resort.  Returns True on success.
+    """
+    if sys.platform == "darwin":
+        candidates = [["pbcopy"]]
+    elif sys.platform == "win32":
+        candidates = [["clip"]]
+    else:
+        candidates = [
+            ["wl-copy"],
+            ["xclip", "-selection", "clipboard"],
+            ["xsel", "--clipboard", "--input"],
+        ]
+
+    for cmd in candidates:
+        if shutil.which(cmd[0]) is None:
+            continue
+        try:
+            proc = subprocess.run(
+                cmd,
+                input=text.encode(),
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            return proc.returncode == 0
+        except Exception:
+            continue
+
+    try:
+        import pyperclip
+        pyperclip.copy(text)
+        return True
+    except Exception:
+        return False
 
 
 def show_options(commands: List[Command]):
@@ -47,18 +89,10 @@ def handle_selected_option(selected):
     if selected.dangerous_explanation:
         rprint(f"[red]Warning: {selected.dangerous_explanation}[/red]\n")
 
-    # Try clipboard silently — never block on failure
-    clipboard_ok = False
-    try:
-        pyperclip.copy(selected.command)
-        clipboard_ok = True
-    except pyperclip.PyperclipException:
-        pass
-
-    if clipboard_ok:
+    if _copy_to_clipboard(selected.command):
         rprint("[green]>[/green] Copied to clipboard")
     else:
-        rprint("[dim]Could not copy to clipboard[/dim]")
+        rprint("[dim]Could not copy to clipboard — install wl-clipboard (Wayland) or xclip/xsel (X11)[/dim]")
 
     rprint(f"\n  [bold cyan]{selected.command}[/bold cyan]\n")
 

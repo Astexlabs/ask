@@ -45,7 +45,6 @@ class CommandHistory:
         with open(self.path, "a", encoding=self.encoding) as f:
             f.write(new_entry.model_dump_json() + "\n")
 
-        # If we've exceeded max entries, trim the file
         with open(self.path, "r", encoding=self.encoding) as f:
             lines = f.readlines()
             if len(lines) > self.max_entries:

@@ -11,10 +11,6 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 
-# ---------------------------------------------------------------------------
-# ParsedQuery – the structured output of the parser
-# ---------------------------------------------------------------------------
-
 @dataclass
 class ParsedQuery:
     """Structured representation of a user's natural-language query."""
@@ -338,7 +334,6 @@ class SearchPatternExtractor(Extractor):
         if m:
             word = m.group(1).strip()
             if word.lower() not in self._SKIP_WORDS:
-                # Get original casing
                 m_orig = self._SEARCH_FOR_BARE.search(query_original)
                 parsed.search_pattern = word
                 parsed.search_pattern_original = m_orig.group(1).strip() if m_orig else word

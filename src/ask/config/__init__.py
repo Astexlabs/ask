@@ -3,7 +3,6 @@ from typing import Dict, Optional
 
 from dotenv import dotenv_values
 
-
 # Keys that hold secret values — never shown in plain text in the TUI
 SECRET_KEYS = frozenset({
     "OPENAI_API_KEY",

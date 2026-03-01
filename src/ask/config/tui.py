@@ -25,8 +25,8 @@ from ask.constants import (
     DEFAULT_HISTORY_SIZE,
     DEFAULT_MAX_COMMANDS,
     GEMINI_DEFAULT_MODEL,
-    LLMProviders,
     OPENAI_DEFAULT_MODEL,
+    LLMProviders,
 )
 
 _STYLE = questionary.Style(

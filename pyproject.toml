@@ -26,6 +26,13 @@ dev = [
 azure = [
     "azure-identity>=1.20.0"
 ]
+# On Linux/Wayland or Linux/X11 the clipboard requires a native binary.
+# Install one of the following depending on your display server:
+#   Wayland  : sudo apt install wl-clipboard   (provides wl-copy)
+#   X11      : sudo apt install xclip          (provides xclip)
+#            : sudo apt install xsel           (provides xsel)
+# macOS uses pbcopy (built-in). Windows uses clip.exe (built-in).
+# pyperclip is kept as a last-resort fallback for non-standard setups.
 
 [build-system]
 requires = ["setuptools>=61.0"]
