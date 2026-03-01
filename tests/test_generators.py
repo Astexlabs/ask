@@ -2,25 +2,25 @@
 
 import pytest
 
-from zev.llms.local.generators.base import CommandGeneratorRegistry
-from zev.llms.local.generators.discovery import (
+from ask.llms.local.generators.base import CommandGeneratorRegistry
+from ask.llms.local.generators.discovery import (
     CountCommandGenerator,
     FindCommandGenerator,
     SizeCommandGenerator,
 )
-from zev.llms.local.generators.fallback import FallbackCommandGenerator
-from zev.llms.local.generators.file_ops import (
+from ask.llms.local.generators.fallback import FallbackCommandGenerator
+from ask.llms.local.generators.file_ops import (
     ArchiveCommandGenerator,
     CopyCommandGenerator,
     DeleteCommandGenerator,
     MoveCommandGenerator,
     PermissionsCommandGenerator,
 )
-from zev.llms.local.generators.search import (
+from ask.llms.local.generators.search import (
     GrepCommandGenerator,
     ReplaceCommandGenerator,
 )
-from zev.llms.local.generators.system import (
+from ask.llms.local.generators.system import (
     DiskUsageCommandGenerator,
     KillCommandGenerator,
     MemoryCommandGenerator,
@@ -29,7 +29,7 @@ from zev.llms.local.generators.system import (
     UptimeCommandGenerator,
     WhoamiCommandGenerator,
 )
-from zev.llms.local.parser import ParsedQuery
+from ask.llms.local.parser import ParsedQuery
 
 
 # ---------------------------------------------------------------------------

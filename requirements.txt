@@ -1,4 +1,4 @@
-# Core dependencies for zev
+# Core dependencies for ask
 openai>=1.72.0
 pydantic>=2.10.6
 pyperclip>=1.9.0

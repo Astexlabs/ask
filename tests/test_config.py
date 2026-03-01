@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from zev.config import (
+from ask.config import (
     CONFIG_LABELS,
     GENERAL_KEYS,
     PROVIDER_KEYS,
@@ -111,7 +111,7 @@ class TestConfigLabels:
 
 class TestConfigSaveReload:
     def test_set_val_and_reload(self, tmp_path):
-        config_file = tmp_path / ".zevrc"
+        config_file = tmp_path / ".askrc"
         config_file.write_text("LLM_PROVIDER=local\n", encoding="utf-8")
 
         cfg = Config.__new__(Config)
@@ -127,7 +127,7 @@ class TestConfigSaveReload:
         assert cfg.vals.get("LLM_PROVIDER") == "local"
 
     def test_save_writes_file(self, tmp_path):
-        config_file = tmp_path / ".zevrc"
+        config_file = tmp_path / ".askrc"
         config_file.write_text("", encoding="utf-8")
 
         cfg = Config.__new__(Config)
@@ -143,7 +143,7 @@ class TestConfigSaveReload:
 
 class TestConfigDefaults:
     def test_max_commands_default(self, tmp_path):
-        config_file = tmp_path / ".zevrc"
+        config_file = tmp_path / ".askrc"
         config_file.write_text("LLM_PROVIDER=local\n", encoding="utf-8")
 
         cfg = Config.__new__(Config)
@@ -153,7 +153,7 @@ class TestConfigDefaults:
         assert cfg.max_commands == "3"
 
     def test_history_size_default(self, tmp_path):
-        config_file = tmp_path / ".zevrc"
+        config_file = tmp_path / ".askrc"
         config_file.write_text("LLM_PROVIDER=local\n", encoding="utf-8")
 
         cfg = Config.__new__(Config)
@@ -163,7 +163,7 @@ class TestConfigDefaults:
         assert cfg.history_size == "100"
 
     def test_max_commands_custom(self, tmp_path):
-        config_file = tmp_path / ".zevrc"
+        config_file = tmp_path / ".askrc"
         config_file.write_text("LLM_PROVIDER=local\nMAX_COMMANDS=5\n", encoding="utf-8")
 
         cfg = Config.__new__(Config)

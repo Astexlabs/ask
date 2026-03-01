@@ -1,12 +1,12 @@
-You are an expert Python engineer working on the zev repository. Your task is to implement a default Local Mode that works completely offline without any API key or LLM. It must use a string parsing engine to read natural, descriptive queries (e.g., "look for all py files from the last hour") and map them to candidate shell commands using standard tools (find, grep, sed, awk, ls, stat, date, etc.). These candidates should be routed into the existing LLM flow so the user can select, copy, or run them.
+You are an expert Python engineer working on the ask repository. Your task is to implement a default Local Mode that works completely offline without any API key or LLM. It must use a string parsing engine to read natural, descriptive queries (e.g., "look for all py files from the last hour") and map them to candidate shell commands using standard tools (find, grep, sed, awk, ls, stat, date, etc.). These candidates should be routed into the existing LLM flow so the user can select, copy, or run them.
 
 You must deliver a production-ready, highly modular implementation. Strictly adhere to the following architectural guidelines and guardrails:
 
 1. State Management & Initialization (Critical Guardrail)
 
-Prevent Global State Crashes: When a user runs zev for the first time without a .zevrc config, you must gracefully create a default local config (LLM_PROVIDER=local) and explicitly inject this into the active runtime config so the global state does not crash with ValueError: Invalid LLM provider: None.
+Prevent Global State Crashes: When a user runs ask for the first time without a .askrc config, you must gracefully create a default local config (LLM_PROVIDER=local) and explicitly inject this into the active runtime config so the global state does not crash with ValueError: Invalid LLM provider: None.
 
-UX Banner: Update main.py to print a clear, stylized "Local Mode" banner if the user runs zev with no arguments in local mode.
+UX Banner: Update main.py to print a clear, stylized "Local Mode" banner if the user runs ask with no arguments in local mode.
 
 Spinner Bypass: Do not show the "Thinking..." network spinner when routing local commands; local parsing is instantaneous.
 
@@ -32,11 +32,11 @@ GNU vs. BSD: Do not hardcode GNU-specific flags (like stat --format='%Y %n'). Cr
 
 5. Graceful Degradation (UX)
 
-Contextual Fallbacks: If the query cannot be fully mapped to an action, the FallbackCommandGenerator must not execute arbitrary commands like pwd. Instead, it should read whatever partial context was extracted (e.g., if a file type was found) and output helpful, educational command suggestions formatted as comments (e.g., # Try: zev 'find python files').
+Contextual Fallbacks: If the query cannot be fully mapped to an action, the FallbackCommandGenerator must not execute arbitrary commands like pwd. Instead, it should read whatever partial context was extracted (e.g., if a file type was found) and output helpful, educational command suggestions formatted as comments (e.g., # Try: ask 'find python files').
 
 6. Testing & Type Compatibility
 
-Python 3.9 Compliance: zev supports Python 3.9. You must use Optional[T] and List[T] from the typing module. Do not use the Python 3.10+ | union syntax (e.g., OptionsResponse | None will crash).
+Python 3.9 Compliance: ask supports Python 3.9. You must use Optional[T] and List[T] from the typing module. Do not use the Python 3.10+ | union syntax (e.g., OptionsResponse | None will crash).
 
 Robust Tests: Write granular unit tests for your extractors, platform utilities, and generators. When writing assertions for extractors, remember that your parser lowercases strings (e.g., assert against 'todo', not 'TODO').
 

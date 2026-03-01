@@ -1,16 +1,16 @@
-# Zev 🔍
+# Ask 🔍
 
-[![PyPI version](https://badge.fury.io/py/zev.svg)](https://badge.fury.io/py/zev)
+[![PyPI version](https://badge.fury.io/py/ask.svg)](https://badge.fury.io/py/ask)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Zev helps you remember (or discover) terminal commands using natural language.
+Ask helps you remember (or discover) terminal commands using natural language.
 
 ![Description](./.github/demo.gif)
 
 
 ### For Local Development
 
-To install zev locally for development where you can make changes to the code:
+To install ask locally for development where you can make changes to the code:
 
 #### Prerequisites
 - Python 3.10 or higher
@@ -20,8 +20,8 @@ To install zev locally for development where you can make changes to the code:
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/dtnewman/zev.git
-cd zev
+git clone https://github.com/dtnewman/ask.git
+cd ask
 ```
 
 2. **Install in editable mode**:
@@ -42,12 +42,12 @@ python -m pip install -e .
 
 3. **Verify installation**:
 ```bash
-zev --help
+ask --help
 ```
 
 #### How Editable Installation Works
 - Creates a link to your local repository instead of copying files
-- Any changes you make to files in `src/zev/` are immediately reflected when you run `zev`
+- Any changes you make to files in `src/ask/` are immediately reflected when you run `ask`
 - No need to reinstall after making changes
 
 #### Python Version Notes
@@ -70,32 +70,32 @@ For clipboard functionality (copying and pasting) to work properly, you may need
 ### Option 1: Interactive Mode
 
 ```bash
-zev
+ask
 ```
 
 ### Option 2: Direct Query
 
 ```bash
-zev '<what you want to do>'
+ask '<what you want to do>'
 ```
 
 ## 📝 Examples
 
 ```bash
 # Find running processes
-zev 'show all running python processes'
+ask 'show all running python processes'
 
 # File operations
-zev 'find all .py files modified in the last 24 hours'
+ask 'find all .py files modified in the last 24 hours'
 
 # System information
-zev 'show disk usage for current directory'
+ask 'show disk usage for current directory'
 
 # Network commands
-zev 'check if google.com is reachable'
+ask 'check if google.com is reachable'
 
 # Git operations
-zev 'show uncommitted changes in git'
+ask 'show uncommitted changes in git'
 ```
 
 ## 🛡️ Safety Considerations
@@ -116,7 +116,7 @@ zev 'show uncommitted changes in git'
 You can update your API keys and provider settings by running:
 
 ```bash
-zev --setup
+ask --setup
 ```
 
 ### OpenAI
@@ -129,11 +129,11 @@ To use Google's Gemini models, you need a Google AI Studio account. You can crea
 
 ## 🐪 Using with Ollama
 
-You can use Zev with [Ollama](https://ollama.ai/) as an alternative to hosted providers, which lets you run all commands locally. To set this up:
+You can use Ask with [Ollama](https://ollama.ai/) as an alternative to hosted providers, which lets you run all commands locally. To set this up:
 
 1. Install and start [Ollama](https://ollama.com/) with a model of your choice
 
-2. Run `zev --setup` and put in the proper settings. For example:
+2. Run `ask --setup` and put in the proper settings. For example:
 
 ``` bash
 ? Pick your LLM provider: Ollama
@@ -147,9 +147,9 @@ To use Azure OpenAI, you’ll need access to an [Azure OpenAI](https://azure.mic
 
 1. Create a deployment of the model you want to use (e.g., `gpt-4o`, `gpt-4o-mini` etc.).
 
-1. Install required Azure depedencies with `pip install zev[azure]`.
+1. Install required Azure depedencies with `pip install ask[azure]`.
 
-1. Run `zev --setup` and put in the proper settings. For example:
+1. Run `ask --setup` and put in the proper settings. For example:
 
     ``` bash
     ? Pick your LLM provider: Azure OpenAI
@@ -162,7 +162,7 @@ To use Azure OpenAI, you’ll need access to an [Azure OpenAI](https://azure.mic
     > **Note:** Model version must be 2024-08-06 or newer.  
     > API version must be 2024-08-01-preview or newer.
 
-Note that to switch backends, you can re-run `zev --setup` again at any time.
+Note that to switch backends, you can re-run `ask --setup` again at any time.
 
 ## 🤝 Contributing
 

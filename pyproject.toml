@@ -1,5 +1,5 @@
 [project]
-name = "zev"
+name = "ask"
 version = "0.8.1"
 description = "Lookup CLI commands easily"
 readme = "README.md"
@@ -12,10 +12,10 @@ dependencies = [
     "rich>=13.9.4"
 ]
 requires-python = ">=3.9"
-urls = { Repository = "https://github.com/dtnewman/zev" }
+urls = { Repository = "https://github.com/dtnewman/ask" }
 
 [project.scripts]
-zev = "zev.main:app"
+ask = "ask.main:app"
 
 [project.optional-dependencies]
 dev = [
@@ -33,7 +33,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["zev*"]
+include = ["ask*"]
 
 [tool.ruff]
 line-length = 120

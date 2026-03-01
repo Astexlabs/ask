@@ -4,7 +4,7 @@ import shlex
 
 import pytest
 
-from zev.llms.local.sanitize import quote_path, quote_pattern
+from ask.llms.local.sanitize import quote_path, quote_pattern
 
 
 class TestQuotePath:

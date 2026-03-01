@@ -2,7 +2,7 @@
 
 import pytest
 
-from zev.llms.local.provider import LocalProvider
+from ask.llms.local.provider import LocalProvider
 
 
 class TestLocalProvider:

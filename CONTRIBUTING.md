@@ -1,6 +1,6 @@
-# Contributing to Zev
+# Contributing to Ask
 
-Thank you for your interest in contributing to Zev! This document provides guidelines and steps for contributing to our project.
+Thank you for your interest in contributing to Ask! This document provides guidelines and steps for contributing to our project.
 
 ## Successfully Contributing
 
@@ -25,11 +25,11 @@ For feature changes, the best way to ensure quick review is including a screen r
 
 ### Your change implements a feature I don't like
 
-In general, Zev is aiming to remain very simple. Anything that makes it less simple to use is _likely_ to be rejected. For feature additions, try to open an issue first, so that it can be discussed there before you code.
+In general, Ask is aiming to remain very simple. Anything that makes it less simple to use is _likely_ to be rejected. For feature additions, try to open an issue first, so that it can be discussed there before you code.
 
 ### Your change isn't written cleanly or doesn't follow the style of the code
 
-Sometimes I will suggest modifications, but it's time consuming, so if the code is very messy, I might reject outright. Code that doesn't follow the style conventions of the surrounding code will also be rejected... not because I believe that Zev is written with objectively great style, but because I believe that consistency > correctness when it comes to style.
+Sometimes I will suggest modifications, but it's time consuming, so if the code is very messy, I might reject outright. Code that doesn't follow the style conventions of the surrounding code will also be rejected... not because I believe that Ask is written with objectively great style, but because I believe that consistency > correctness when it comes to style.
 
 ### You are changing too many things at once
 
@@ -44,4 +44,4 @@ Keep PRs specific, to the point and focused on one thing.
 
 If you have any questions or run into issues, open an issue in the repository or reach out to one of the maintainers.
 
-Thank you for contributing to Zev!
+Thank you for contributing to Ask!
