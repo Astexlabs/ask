@@ -1,6 +1,6 @@
 # Ask
 
-[![PyPI](https://badge.fury.io/py/ask.svg)](https://pypi.org/project/ask/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI](https://badge.fury.io/py/astexlabs-ask.svg)](https://pypi.org/project/astexlabs-ask/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Terminal commands from natural language.
 
