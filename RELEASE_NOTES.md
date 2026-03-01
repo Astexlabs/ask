@@ -1,5 +1,12 @@
 # Release notes
 
+## v0.2.1 (Beta)
+
+- **Improved escape-character handling** — Better catching and sanitization of escape characters in user input and generated commands.
+- **Improved command recognition** — More reliable parsing and recognition of natural-language queries.
+
+---
+
 ## v0.1.1 (Beta) — First version
 
 **This is a beta release.** We’re still refining things; feedback and bug reports are welcome.
